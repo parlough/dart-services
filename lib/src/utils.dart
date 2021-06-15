@@ -1,7 +1,8 @@
 import 'package:path/path.dart' as path;
 
 /// Matches any path in the string and replaces the part of the path before the
-/// last separator with either dart:core, package:flutter, or removes it.
+/// last separator with either dart:core, package:flutter, or removes it if is
+/// not a http link.
 ///
 /// ## Examples:
 ///
@@ -13,9 +14,10 @@ import 'package:path/path.dart' as path;
 /// "Unused import: 'package:flutter/material.dart'" -> "Unused import:
 /// 'package:flutter/material.dart'"
 String stripFilePaths(String str) {
+  
   // Match any URI. Also match URIs that are prefixed with dart:core or
   // package:*
-  final regex = RegExp(r'(?:dart:core?)?(?:package:?)?[a-z]*\/\S*');
+  final regex = RegExp(r'(?:dart:core?)?(?:package:?)?[a-z]*\/[^/\S]\S*');
 
   return str.replaceAllMapped(regex, (match) {
     final urlString = match.group(0);
